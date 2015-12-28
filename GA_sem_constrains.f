@@ -49,14 +49,12 @@ c      The GA parameters is defined in here
        Nt = nbits*npar
        keep = FLOOR(selection*popsize)
 c       iga = 0     !iteration number
-       
        dt = 0.004  ! time sample rate
        N = 1
        size_t = 4
        count = 0
        sumPPD = 0
        
-
 c     ----- CALLING ZEROS FOR SEVERAL ARRAYS -----
        CALL zero(synthetic,maxray)
        CALL zero(model_final,maxray)
@@ -67,7 +65,6 @@ c     ----- CALLING ZEROS FOR SEVERAL ARRAYS -----
        CALL zero(individuos,Nsel)
        CALL zero(indx,popsize)
 
-c      -----------------------------------------------------------------
 c      Creating the initial population P-WAVE
         hi_p = 1500.0     ! bounds of P-wave velocity
         lo_p = 3500.0        
@@ -81,8 +78,6 @@ c      Creating the initial population P-WAVE
         ALLOCATE(o1parp(Nsel/2,npar))
         ALLOCATE(o2parp(Nsel/2,npar))
         par_p = gadecode(pop_p,hi_p,lo_p,nbits,popsize,npar)
-       
-       
 
 c      Creating the initial population S-WAVE  
         hi_s = 300.0     ! bounds of S-wave velocity
@@ -98,9 +93,6 @@ c      Creating the initial population S-WAVE
         ALLOCATE(o2pars(Nsel/2,npar))
         par_s = gadecode(pop_s,hi_s,lo_s,nbits,popsize,npar)
 
-
-                    
-             
 c       Creating the initial population DENSITY  
         hi_rho = 1.0     ! bounds of P-wave velocity
         lo_rho = 2.0        
@@ -117,18 +109,16 @@ c       Creating the initial population DENSITY
 
 c      Creating the initial population of thicknesses
         thickness = (/1000,50,50,500/) 
-        
-        
+
         ALLOCATE(pop(popsize,3*Nt))
         ALLOCATE(par(popsize,3*npar))
         ALLOCATE(offsp1(Nsel/2,3*Nt))
         ALLOCATE(offsp2(Nsel/2,3*Nt))
        
-       
         DO 133 i=1,popsize
           par(i,:) = (/ par_p(i,:),par_s(i,:),par_rho(i,:) /)
           pop(i,:) = (/ pop_p(i,:),pop_s(i,:),pop_rho(i,:) /)
-133 		  CONTINUE
+133     CONTINUE
 
         DO f=1,3*npar
             DO l=1,2**nbits+1
@@ -142,37 +132,16 @@ c      Creating the initial population of thicknesses
         hi = (/ hi_p,hi_p,hi_p,hi_p,hi_s,hi_s,hi_s,hi_s,hi_rho,
      1        hi_rho,hi_rho,hi_rho /)
 
-c        lo = (/ lo_p,lo_p,lo_s,lo_s,lo_rho,lo_rho /)
-c        hi =  (/ hi_p,hi_p,hi_s,hi_s,hi_rho,hi_rho /)
-Cc      ---------------------------------------------------------------
-Cc      ---------------------------------------------------------------
-Cc      ---------------------------------------------------------------
-Cc      ---------------  TRUE MODEL I WANT TO FIND OUT   --------------
-Cc      ---------------------------------------------------------------
-Cc      ---------------------------------------------------------------
-Cc      ---------------------------------------------------------------
-      
+c       True model that will be inverted    
         VP(1,:)  = (/ 2000, 2800, 2300, 3000 /)
         VS(1,:)  = (/ 551.72, 1241.38,  810.34, 1413.8  /)
         RHO(1,:) = (/ 1.5381, 1.6731, 1.5928, 1.7022 /)
  
-c        VP(1,:) = (/ 2003, 2540/)
-c        VS(1,:) = (/ 646, 1190 /)
-c        RHO(1,:) = (/ 1.51, 1.970 /)
-
         CALL d2t(VP(1,:),VS(1,:),RHO(1,:),thickness,dt,nl,
      1       vp_it, vs_it, rho_it, depth_it,time_series,nopt1)
      
-
         CALL synt(vp_it,vs_it,rho_it,depth_it,
      1       nopt1,model_final,grc)
-
-				cc=1
-c        CALL init_random_seed()
-c        CALL RANDOM_NUMBER(noise)
-c        noise = noise/5 
-c        model_final = model_final + noise
-          
 
 c        OPEN (unit = 75, file = 'cmp_invertido.txt') 
 c        DO vv=1,nopt1
@@ -188,18 +157,8 @@ c     1  ", "         iteration", "   time_elapsed"
         DEALLOCATE(rho_it)
         DEALLOCATE(depth_it)
         DEALLOCATE(time_series)
-C       
-Cc      ---------------------------------------------------------------
-Cc      ---------------------------------------------------------------
-Cc      ---------------------------------------------------------------
-Cc      -----------------    END OF TRUE MODELING    ------------------
-Cc      ---------------------------------------------------------------
-Cc      ---------------------------------------------------------------
-Cc      ---------------------------------------------------------------
-C
-C!23456
-        DO 20 i=1,popsize !compute one synthetic seismogram for each elem.
-
+c       start the modeling of the first population       
+        DO 20 i=1,popsize 
             CALL d2t(par_p(i,:),par_s(i,:),par_rho(i,:),thickness,dt,nl,
      1          vp_it, vs_it, rho_it, depth_it,time_series,nopt2)
        
@@ -217,11 +176,11 @@ C!23456
      
             IF(nopt1.GT.nopt2)THEN
             CALL xcross2d(synthetic(1:nopt1,:),model_final(1:nopt1,:),
-     1	    nopt1,no_traces,rr)
+     1        nopt1,no_traces,rr)
             ELSE
             
             CALL xcross2d(synthetic(1:nopt2,:),model_final(1:nopt2,:),
-     1	    nopt2,no_traces,rr)
+     1        nopt2,no_traces,rr)
             ENDIF
              
             IF(rr.lt.0) THEN
@@ -229,32 +188,18 @@ C!23456
             ELSE
                 fitness(i) = rr
             ENDIF
-          
 20      ENDDO
-
 
         umax = MAXVAL(fitness)
         umin = MINVAL(fitness)
         uavg = SUM(fitness)/popsize
-      
-    
         CALL scalepop(fitness,popsize,umax,uavg,umin) !scale the fitness landscape       
         CALL sort(popsize,fitness,indx)               !sorting the fitness values
         CALL reverse(indx,popsize)                   !reversing sorting higher to lower
         fitness=fitness(indx)
         pop=pop(indx,:)
-       
-       
-
-cCc ---------------------------------------------------------------------------------------
-cCc ---------------------------------------------------------------------------------------
-cCc -------------------- Now we start the loop to find the best population ----------------
-cCc ---------------------------------------------------------------------------------------
-cCc ---------------------------------------------------------------------------------------
-c
-cC
+c     start of the genetic algorithm scheme
       DO 9999 u =1,maxit
-      
         IF(u.GT.maxit/2)then
             Pu = 0.3
         ENDIF
