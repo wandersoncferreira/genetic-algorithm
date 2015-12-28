@@ -3,7 +3,7 @@
        USE ga_methods
        
        
-       PARAMETER (maxray=6500,no_traces=12,Nsel=10,npar=4,nbits=11) 
+       PARAMETER (maxray=6500,no_traces=12,Nsel=10,npar=4,nbits=5) 
        INTEGER, PARAMETER :: popsize=5, nl=4  
        INTEGER  maxit,iga, Nt, keep, nparM,zz,nPPD(3*npar,2**(nbits)+1)
        INTEGER tt,kk,nindex,mo_p(Nsel/2),fa_p(Nsel/2),winner(1),k
