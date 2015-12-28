@@ -1,4 +1,4 @@
-PROJECT=GA
+PROJECT=GA_sem_constrains
 COMPILER=gfortran
 BUILD=$(COMPILER) $(PROJECT).f
 RUN=./a.out
