@@ -39,17 +39,17 @@ c       REAL*4 par_s(popsize,npar),par_rho(popsize,npar)
        REAL*4, DIMENSION(:), ALLOCATABLE  :: time_series
 
  
-c      The GA parameters is defined in here     
+c      The GA parameters is defined here     
        CALL CPU_TIME(t1)
        maxit = 200
-       Pm = 0.1         ! mutation rate
+       Pm = 0.1           ! mutation rate
        Pc = 0.9           ! crossover rate 
-       Pu = 0.4       ! update rate
-       selection = 0.5   ! selection rate
+       Pu = 0.4           ! update rate
+       selection = 0.5    ! selection rate
        Nt = nbits*npar
        keep = FLOOR(selection*popsize)
-c       iga = 0     !iteration number
-       dt = 0.004  ! time sample rate
+c       iga = 0           ! iteration number
+       dt = 0.004         ! time sample rate
        N = 1
        size_t = 4
        count = 0
@@ -66,8 +66,8 @@ c     ----- CALLING ZEROS FOR SEVERAL ARRAYS -----
        CALL zero(indx,popsize)
 
 c      Creating the initial population P-WAVE
-        hi_p = 1500.0     ! bounds of P-wave velocity
-        lo_p = 3500.0        
+        hi_p = 1500.0     ! bounds for P-wave velocity
+        lo_p = 3500.0     ! These are a priori information   
         ALLOCATE(pop_p(popsize,Nt))
         ALLOCATE(offsp1_p(Nsel/2,Nt))
         ALLOCATE(offsp2_p(Nsel/2,Nt))
@@ -107,7 +107,7 @@ c       Creating the initial population DENSITY
         ALLOCATE(o2parho(Nsel/2,npar))
         par_rho = gadecode(pop_rho,hi_rho,lo_rho,nbits,popsize,npar)
 
-c      Creating the initial population of thicknesses
+c       Creating the initial population of thicknesses
         thickness = (/1000,50,50,500/) 
 
         ALLOCATE(pop(popsize,3*Nt))
