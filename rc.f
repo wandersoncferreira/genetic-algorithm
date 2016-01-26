@@ -6,7 +6,7 @@ c account the parametrization done by Simmons and Backus (1996)
 
        REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,tmp1,tmp2,RCG,Y
        REAL vp_avg,vs_avg,rho_avg,d_vp,d_rho,Ra,Rp,tmp3,tmp4,Rb,Rrho
-       REAL dRb,dRrho,dRsh,RCF
+       REAL dRb,dRrho,dRsh,RCF,k
        INTEGER i_rock
 
   
@@ -22,12 +22,12 @@ coefficient (Ro) based on the equations (6)
        d_vp    = (vp2 - vp1)
        d_rho   = (rho2 - rho1)
        Ra      = (1/2.0)*(d_vp/vp_avg)
-       Rp      = (1/2.0)*(d_p/rho_avg)
+       Rp      = (1/2.0)*(d_rho/rho_avg)
        Ro      = Ra + Rp
 
 c RC equation without any assumptions (Gardner nor Castagna) eq.18
-       tmp1    = (0.8 - 0.2*Y - 1.6*k*Y)*(sin(angr))**2
-       tmp2    = 0.8*((sin(angr))**2)*(tan(angr)**2)
+       tmp1    = (0.8 - 0.2*Y - 1.6*k*Y)*(sin(angr)**2)
+       tmp2    = 0.8*((sin(angr)**2))*(tan(angr)**2)
        RCG     = (1 + tmp1 + tmp2)*Ro
 
 c Computing dRsh - prediction error for shear wave
@@ -42,5 +42,5 @@ c RC final equation after Gardner and Castagna relationship and the
 c prediction errors for hydrocarbon zones. eq. 23
        tmp3    = 2*Y*(sin(angr)**2)*dRsh
        tmp4    = (Y -1 - (tan(angr)**2))*(sin(angr)**2)*dRrho
-       RCF      = RCG - tmp3 + tmp4
+       RCF      = RCG  - tmp3 + tmp4
        END

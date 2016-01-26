@@ -4,9 +4,9 @@ c account the parametrization done by Simmons and Backus (1996)
        SUBROUTINE aki(vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,i_rock,
      1    RC) !output
 
-       REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,tmp1,tmp2,RCG,Y
-       REAL vp_avg,vs_avg,rho_avg,d_vp,d_rho,Ra,Rp,tmp3,tmp4,Rb,Rrho
-       REAL dRb,dRrho,dRsh,RCF,RSH,Rho,k
+       REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,tmp1,tmp2,Y
+       REAL vp_avg,vs_avg,rho_avg,d_vp,d_rho,Ra,Rp,tmp3,Rb
+       REAL k
        INTEGER i_rock
 
   
@@ -26,10 +26,10 @@ coefficient (Ro) based on the equations (6)
        Rp      = (1/2.0)*(d_rho/rho_avg)
        Ro      = Ra + Rp
         
-       tmp1 = 0.5*(Ra + Rp)
-       tmp2 = 0.5*(Ra - Y*Rp -2*Y*Rb)
-       tmp3 = 0.5*(Ra)
+       tmp1 = Ra + Rp
+       tmp2 = Ra - Y*Rp -2*Y*Rb
+       tmp3 = Ra
 
-      RC=tmp1+tmp2*(sin(angr)**2)+tmp3*(sin(angr)**2)*(tan(angr)**2)
+       RC=tmp1+tmp2*(sin(angr)**2)+tmp3*(sin(angr)**2)*(tan(angr)**2)
 
        END

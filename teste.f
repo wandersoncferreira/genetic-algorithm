@@ -10,15 +10,15 @@ c Temp values
       i_rock=0
       
       vp1 = (8200)*0.3048
-      vs1 = (3833)*0.3048
-      rho1= 2.30
+      !vs1 = (3833)*0.3048
+      !rho1= 2.30
       
-      vp2 = (8311)*0.3048
-      vs2 = (5215)*0.3048
-      rho2= 2.15
+      vp2 = (9800)*0.3048
+      !vs2 = (5071)*0.3048
+      !rho2= 2.27
 
-      !CALL  f2m(vp1,vs1,rho1)
-      !CALL  f2m(vp2,vs2,rho2)
+      CALL  f2m(vp1,vs1,rho1)
+      CALL  f2m(vp2,vs2,rho2)
       !write(*,*)vp1,vs1,rho1
       !write(*,*)vp2,vs2,rho2
       
@@ -41,7 +41,7 @@ c     TESTE COM MODELO PROPOSTO POR SIMMONS E BACKUS
      1    RCF,dRrho,dRsh)
        v1(i,2)=RCF
        angr=i*pi/180.0
-       !write(*,*)dRrho,dRsh
+       write(*,*)dRrho,dRsh
 20    ENDDO 
 
       DO j=1,80
@@ -58,9 +58,8 @@ c     TESTE COM MODELO IMPLEMENTADO NA TESE
 
       angr=0.0
       DO 30 i=1,80
-       CALL shuey(vp1,vp2,vs1,vs2
-     1            ,rho1,rho2,angr,angr_inc,i_rock,
-     1            RCF)
+       CALL aki(vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,i_rock,
+     1    RCF)
        v2(i,2)=RCF
        angr=i*pi/180.0
 30    ENDDO 

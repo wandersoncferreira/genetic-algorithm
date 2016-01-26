@@ -30,9 +30,9 @@ coefficient (Ro) based on the equations (6)
        tmp2 = 2*Y*(sin(angr)**2)
        tmp3 = (Y-1-(tan(angr)**2))
        
-       RP = (Ra + Rp)
-       Rsh= (Rb + Rp)
+       RCF =(Ra + Rp)
+       RSH = (Rb + Rp)
 
-       RC=tmp1*RP - tmp2*RSH +tmp3*Rp
+       RC=tmp1*RCF - tmp2*RSH +tmp3*(sin(angr)**2)*Rp
 
        END
