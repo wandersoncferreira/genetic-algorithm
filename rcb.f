@@ -1,7 +1,7 @@
 c This script will compute the reflection coefficient taking into
 c account the parametrization done by Simmons and Backus (1996)
 !23456789     
-       SUBROUTINE aki(vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,i_rock,
+       SUBROUTINE rcb(vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,i_rock,
      1    RC) !output
 
        REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,tmp1,tmp2,RCG,Y
@@ -26,10 +26,13 @@ coefficient (Ro) based on the equations (6)
        Rp      = (1/2.0)*(d_rho/rho_avg)
        Ro      = Ra + Rp
         
-       tmp1 = 0.5*(Ra + Rp)
-       tmp2 = 0.5*(Ra - Y*Rp -2*Y*Rb)
-       tmp3 = 0.5*(Ra)
+       tmp1 = (1+(sin(angr)**2)+(sin(angr)**2)*(tan(angr)**2))
+       tmp2 = 2*Y*(sin(angr)**2)
+       tmp3 = (Y-1-(tan(angr)**2))
+       
+       RP = (Ra + Rp)
+       Rsh= (Rb + Rp)
 
-      RC=tmp1+tmp2*(sin(angr)**2)+tmp3*(sin(angr)**2)*(tan(angr)**2)
+       RC=tmp1*RP - tmp2*RSH +tmp3*Rp
 
        END
