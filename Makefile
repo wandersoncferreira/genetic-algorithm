@@ -1,5 +1,7 @@
 PROJECT=GA_sem_constrains
-COMPILER=gfortran
+#COMPILER=gfortran -g -fbounds-check
+#COMPILER=gfortran -ffpe-summary
+COMPILER=gfortran -O2 -fimplicit-none  -Wall  -Wline-truncation  -Wcharacter-truncation  -Wsurprising  -Waliasing  -Wimplicit-interface  -Wunused-parameter  -fwhole-file  -fcheck=all  -std=f2008  -pedantic  -fbacktrace
 BUILD=$(COMPILER) $(PROJECT).f
 RUN=./a.out
 all:

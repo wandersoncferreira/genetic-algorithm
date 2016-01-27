@@ -1,4 +1,5 @@
       PROGRAM plot_test
+        USE library
 
       REAL v1(90,2),angr_inc,pi,vp1,vp2,vs1,vs2,rho1,rho2,angr,RCF
       REAL v2(90,2),v3(90,2),dRrho,dRsh
