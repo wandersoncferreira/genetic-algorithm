@@ -11,18 +11,17 @@ c account the parametrization done by Simmons and Backus (1996)
 
        !convert Vp to ft/s in order to use Gardner's relationship
        vp_tmp = vp/0.3048
-       rho=0.2127*(vp_tmp**0.25)
+       rho=0.23*(vp_tmp**0.25)
 
        END SUBROUTINE
 
 !! NEW SUBROUTINE RC - SIMMONS AND BACKUS FINAL       
-       SUBROUTINE rc(vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,i_rock,
+       SUBROUTINE sims(vp1,vp2,vs1,vs2,rho1,rho2,angr,
      1    RCF,dRrho,dRsh) !output
 
-       REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,tmp1,tmp2,RCG,Y
+       REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,tmp1,tmp2,RCG,Y
        REAL vp_avg,vs_avg,rho_avg,d_vp,d_rho,Ra,Rp,tmp3,tmp4,Rb,Rrho
-       REAL dRb,dRrho,dRsh,RCF,k,Ro
-       INTEGER i_rock
+       REAL dRb,dRrho,dRsh,RCF,k,Ro,d_vs
 
   
 c Aux Variables to compute the eq.18
@@ -36,6 +35,8 @@ coefficient (Ro) based on the equations (6)
        rho_avg = (rho1 + rho2)/2.0
        d_vp    = (vp2 - vp1)
        d_rho   = (rho2 - rho1)
+       d_vs    = (vs2 - vs1)
+       Rb      = (1/2.0)*(d_vs/vs_avg)
        Ra      = (1/2.0)*(d_vp/vp_avg)
        Rp      = (1/2.0)*(d_rho/rho_avg)
        Ro      = Ra + Rp
@@ -46,10 +47,10 @@ c RC equation without any assumptions (Gardner nor Castagna) eq.18
        RCG     = (1 + tmp1 + tmp2)*Ro
 
 c Computing dRsh - prediction error for shear wave
-       Rb      = k*Ra
-       Rrho    = 0.25*Ra 
-       dRb     = Rb   - 0.8*k*Ro
-       dRrho   = Rrho - 0.2*Ro 
+       !Rb      = k*Ra
+       Rrho    = Rp   !0.25*Ra 
+       dRb     = Rb   - 0.75*k*Ro
+       dRrho   = Rrho - 0.25*Ro 
        dRsh    = dRb  + dRrho
 
 
@@ -62,13 +63,12 @@ c prediction errors for hydrocarbon zones. eq. 23
 
 
 ! NEW MODULE RCB       
-       SUBROUTINE rcb(vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,i_rock,
+       SUBROUTINE gard(vp1,vp2,vs1,vs2,rho1,rho2,angr,
      1    RC) !output
 
-       REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,tmp1,tmp2,RCG,Y
-       REAL vp_avg,vs_avg,rho_avg,d_vp,d_rho,Ra,Rp,tmp3,tmp4,Rb,Rrho
-       REAL dRb,dRrho,dRsh,RCF,RSH,Rho,k,Ro,d_vs,RC
-       INTEGER i_rock
+       REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,tmp1,tmp2,Y
+       REAL vp_avg,vs_avg,rho_avg,d_vp,d_rho,Ra,Rp,tmp3,Rb
+       REAL RCF,RSH,k,Ro,d_vs,RC
 
   
 c Aux Variables to compute the eq.18
@@ -100,13 +100,12 @@ coefficient (Ro) based on the equations (6)
 
 
 !! NEW SUBROUTINE AKI AND RICHARDS       
-       SUBROUTINE aki(vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,i_rock,
+       SUBROUTINE aki(vp1,vp2,vs1,vs2,rho1,rho2,angr,
      1    RC) !output
 
-       REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,angr_inc,tmp1,tmp2,Y
+       REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,tmp1,tmp2,Y
        REAL vp_avg,vs_avg,Ro,rho_avg,d_vp,d_rho,Ra,Rp,tmp3,Rb
        REAL k,RC,d_vs
-       INTEGER i_rock
 
   
 c Aux Variables to compute the eq.18
