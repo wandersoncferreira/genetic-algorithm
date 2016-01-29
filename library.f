@@ -17,7 +17,7 @@ c account the parametrization done by Simmons and Backus (1996)
 
 !! NEW SUBROUTINE RC - SIMMONS AND BACKUS FINAL       
        SUBROUTINE sims(vp1,vp2,vs1,vs2,rho1,rho2,angr,
-     1    RCF,dRrho,dRsh) !output
+     1    RCF,dRrho,dRsh,RCG) !output
 
        REAL vp1,vp2,vs1,vs2,rho1,rho2,angr,tmp1,tmp2,RCG,Y
        REAL vp_avg,vs_avg,rho_avg,d_vp,d_rho,Ra,Rp,tmp3,tmp4,Rb,Rrho

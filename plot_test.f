@@ -2,7 +2,7 @@
         USE library
 
       REAL v1(90,2),pi,vp1,vp2,vs1,vs2,rho1,rho2,angr,RCF
-      REAL v2(90,2),v3(90,2),dRrho,dRsh,RCF_GARD,RCF_AKI
+      REAL v2(90,2),v3(90,2),dRrho,dRsh,RCF_GARD,RCG,RCF_AKI
       INTEGER i,j,f
   
 c Temp values
@@ -12,12 +12,12 @@ c Temp values
       !vs2 = (6128.2)*0.3048
       !rho2= 2.4783
       
-      !vp2 = (11000)*0.3048
-      !vs2 = (5215)*0.3048
-      !rho2= 2.15
-      vp2 = (8889.7)*0.3048
-      vs2 = (5514.6)*0.3048
-      rho2= 2.463
+      vp2 = (9080)*0.3048
+      vs2 = (5523.4)*0.3048
+      rho2= 2.456
+      !vp2 = (8889.7)*0.3048
+      !vs2 = (5514.6)*0.3048
+      !rho2= 2.463
 
       CALL  f2m(vp1,vs1,rho1)
       !CALL  f2m(vp2,vs2,rho2)
@@ -40,11 +40,12 @@ c     TESTE COM MODELO PROPOSTO POR SIMMONS E BACKUS
       angr=0.0
       DO 20 i=1,80
        CALL sims(vp1,vp2,vs1,vs2,rho1,rho2,angr,
-     1    RCF,dRrho,dRsh)
+     1    RCF,dRrho,dRsh,RCG)
        v1(i,2)=RCF
+       v2(i,2)=RCG
        angr=i*pi/180.0
 20    ENDDO 
-       write(*,*)dRrho,dRsh
+       write(*,*)"Drho: ", dRrho, "dRsh: ", dRsh
 
       DO j=1,80
         v1(j,1)=j
@@ -62,7 +63,6 @@ c     TESTE COM MODELO IMPLEMENTADO NA TESE
       DO 30 i=1,80
        CALL aki(vp1,vp2,vs1,vs2,rho1,rho2,angr,
      1    RCF_AKI)
-       v2(i,2)=RCF_AKI
        angr=i*pi/180.0
 30    ENDDO 
 
